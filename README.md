@@ -1,32 +1,29 @@
-# Federal Accounting Standards Advisory Board (FASAB) (federal-accounting-standards-advisory-board)
-The Federal Accounting Standards Advisory Board (FASAB) is an independent organization responsible for establishing accounting standards for the federal government. FASAB strives to improve the quality and consistency of financial reporting within federal agencies, ultimately ensuring transparency and accountability in government financial operations. The board collaborates with key stakeholders, including Congress, the Office of Management and Budget, and federal agencies, to develop and maintain accounting principles that meet the needs of users and promote sound financial management practices. By setting standards for reporting, FASAB plays a critical role in enhancing the efficiency and effectiveness of federal financial operations and decision-making processes.
+# Federal Accounting Standards Advisory Board (federal-accounting-standards-advisory-board)
+The Federal Accounting Standards Advisory Board (FASAB) is an independent organization responsible for establishing accounting standards for the federal government. FASAB strives to improve the quality and consistency of financial reporting within federal agencies, ultimately ensuring transparency and accountability in government financial operations.
 
-**URL:** [Visit APIs.json URL](https://example.com/apis/apis.yml)
+**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/apis.yml)
 
 ## Scope
 
-- **Type:** Contract 
-- **Position:** Consuming 
-- **Access:** 3rd-Party 
+- **Type:** Index
+- **Position:** Consumer
+- **Access:** 3rd-Party
 
 ## Tags:
 
- - Federal Government, Accounting
+ - Accounting, Federal Government
 
 ## Timestamps
 
-- **Created:** 2024-12-25 
-- **Modified:** 2025-04-07 
-
-## APIs
-
+- **Created:** 2024-12-25
+- **Modified:** 2026-04-28
 
 ## Common Properties
 
+- [Website](https://fasab.gov/)
 
 ## Maintainers
 
-**FN:** API Evangelist
+**FN:** Kin Lane
 
-**Email:** info@apievangelist.com
-
+**Email:** kin@apievangelist.com
