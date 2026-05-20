@@ -20,6 +20,8 @@ url: >-
 specificationVersion: '0.19'
 apis: []
 common:
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/federal-accounting-standards-advisory-board
   - type: Website
     url: https://fasab.gov/
 maintainers:
