@@ -20,10 +20,14 @@ url: >-
 specificationVersion: '0.19'
 apis: []
 common:
+  - type: DomainSecurity
+    url: security/federal-accounting-standards-advisory-board-domain-security.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/federal-accounting-standards-advisory-board
   - type: Website
     url: https://fasab.gov/
+  - url: https://fasab.gov/feed/
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
