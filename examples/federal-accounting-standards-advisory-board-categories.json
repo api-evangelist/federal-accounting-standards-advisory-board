@@ -1,0 +1,92 @@
+[
+    {
+        "id": 4,
+        "count": 4,
+        "description": "",
+        "link": "https://fasab.gov/category/podcasts/",
+        "name": "Podcasts",
+        "slug": "podcasts",
+        "taxonomy": "category",
+        "parent": 0,
+        "meta": [],
+        "_links": {
+            "self": [
+                {
+                    "href": "https://fasab.gov/wp-json/wp/v2/categories/4",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://fasab.gov/wp-json/wp/v2/categories"
+                }
+            ],
+            "about": [
+                {
+                    "href": "https://fasab.gov/wp-json/wp/v2/taxonomies/category"
+                }
+            ],
+            "wp:post_type": [
+                {
+                    "href": "https://fasab.gov/wp-json/wp/v2/posts?categories=4"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    },
+    {
+        "id": 1,
+        "count": 0,
+        "description": "",
+        "link": "https://fasab.gov/category/uncategorized/",
+        "name": "Uncategorized",
+        "slug": "uncategorized",
+        "taxonomy": "category",
+        "parent": 0,
+        "meta": [],
+        "_links": {
+            "self": [
+                {
+                    "href": "https://fasab.gov/wp-json/wp/v2/categories/1",
+                    "targetHints": {
+                        "allow": [
+                            "GET"
+                        ]
+                    }
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://fasab.gov/wp-json/wp/v2/categories"
+                }
+            ],
+            "about": [
+                {
+                    "href": "https://fasab.gov/wp-json/wp/v2/taxonomies/category"
+                }
+            ],
+            "wp:post_type": [
+                {
+                    "href": "https://fasab.gov/wp-json/wp/v2/posts?categories=1"
+                }
+            ],
+            "curies": [
+                {
+                    "name": "wp",
+                    "href": "https://api.w.org/{rel}",
+                    "templated": true
+                }
+            ]
+        }
+    }
+]

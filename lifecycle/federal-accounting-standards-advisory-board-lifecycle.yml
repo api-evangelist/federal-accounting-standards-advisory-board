@@ -1,0 +1,50 @@
+generated: '2026-09-09'
+method: probed
+source: https://fasab.gov/wp-json/
+versioning:
+  scheme: namespace-in-path
+  current: wp/v2
+  docs: null
+  namespaces_registered: 23
+  note: >-
+    The version is the WordPress namespace segment. FASAB publishes no versioning policy; the live
+    namespace list is the only version signal, and it moves when WordPress or a plugin is upgraded,
+    not on a FASAB release cadence.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation policy, no RFC 8594 Sunset or Deprecation header observed, and no deprecated
+    operations in the derived contract. FASAB makes no compatibility commitment about this surface.
+deprecated_operations: []
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+status_page_probes:
+- {url: 'https://status.fasab.gov/', http_status: 0, note: DNS does not resolve}
+- {url: 'https://fasab.gov/status/', http_status: 404}
+support:
+  contact_page: https://fasab.gov/about-fasab/contact-information/
+  email: fasab@fasab.gov
+  note: >-
+    General FASAB contact only. There is no developer support channel, no issue tracker and no
+    GitHub organisation (https://api.github.com/orgs/fasab returned 404 on 2026-09-09).
+change_communication:
+  api_changelog: null
+  content_channels:
+  - {name: FASAB newsroom, url: 'https://fasab.gov/newsroom/', http_status: 200}
+  - {name: RSS feed, url: 'https://fasab.gov/feed/', http_status: 200}
+  - {name: Listserv signup, url: 'https://fasab.gov/newsroom/listserv-signup/'}
+  note: >-
+    These announce FASAB standards-setting activity, not API changes. No API changelog exists, so no
+    ChangeLog artifact is emitted.
+stability_assessment:
+  grade: incidental
+  detail: >-
+    This is platform infrastructure exposed by WordPress, not a product FASAB manages as an API. It
+    carries no versioning policy, no deprecation policy, no SLA and no status page, and a routine
+    WordPress or Jetpack upgrade can change the registered route set without notice. An agent should
+    treat it as a best-effort content surface and re-read the route index rather than pinning to it.
+checked: '2026-09-09'

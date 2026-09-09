@@ -1,0 +1,17 @@
+generated: '2026-09-09'
+method: searched
+source: https://fasab.gov/
+plan_count: 0
+pricing_model: none
+note: >-
+  FASAB is a U.S. federal advisory board. It publishes no pricing page, no plans, no quotas and no
+  commercial terms, because there is no product to buy — its standards, handbook and board material
+  are published free to the public as a government function, and the WordPress REST surface behind
+  fasab.gov is served anonymously at no cost. plan_count: 0 is the correct measurement here, not a gap.
+plans: []
+evidence:
+- url: https://fasab.gov/
+  http_status: 200
+- url: https://fasab.gov/accounting-standards/
+  http_status: 200
+checked: '2026-09-09'

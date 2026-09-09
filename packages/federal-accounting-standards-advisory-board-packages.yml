@@ -1,0 +1,24 @@
+generated: '2026-09-09'
+method: searched
+source: public package registry searches, 2026-09-09
+package_count: 0
+official_package_count: 0
+note: >-
+  FASAB ships no client libraries. Searched npm, PyPI, RubyGems, crates.io, Packagist and NuGet for
+  "fasab" on 2026-09-09 and found no first-party package in any of them — npm 0 results, PyPI 404,
+  RubyGems empty, crates.io 0, NuGet 0, and Packagist's 103 hits are all unrelated string matches
+  (fastbill, fasaro, fasapay). There is also no FASAB GitHub organisation to hold one
+  (https://api.github.com/orgs/fasab returned 404). No SDKs pointer is emitted in apis.yml, because
+  there is no SDK. Consumers of the anonymous WordPress REST surface can use any generic WordPress
+  REST client — but that is WordPress's ecosystem, not a FASAB deliverable, and is not recorded here
+  as a first-party package.
+packages: []
+registries_searched:
+- {registry: npm, query: fasab, url: 'https://registry.npmjs.org/-/v1/search?text=fasab', results: 0}
+- {registry: pypi, query: fasab, url: 'https://pypi.org/pypi/fasab/json', http_status: 404}
+- {registry: rubygems, query: fasab, url: 'https://rubygems.org/api/v1/search.json?query=fasab', results: 0}
+- {registry: crates.io, query: fasab, url: 'https://crates.io/api/v1/crates?q=fasab', results: 0}
+- {registry: packagist, query: fasab, url: 'https://packagist.org/search.json?q=fasab', results: 103, relevant: 0}
+- {registry: nuget, query: fasab, url: 'https://azuresearch-usnc.nuget.org/query?q=fasab', results: 0}
+- {registry: github, query: org fasab, url: 'https://api.github.com/orgs/fasab', http_status: 404}
+checked: '2026-09-09'

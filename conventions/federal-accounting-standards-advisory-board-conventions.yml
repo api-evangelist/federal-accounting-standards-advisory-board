@@ -1,0 +1,112 @@
+generated: '2026-09-09'
+method: derived
+source: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+observed: https://fasab.gov/wp-json/wp/v2/posts?per_page=2
+docs: null
+note: >-
+  FASAB publishes no API conventions documentation. Everything below is derived from the live route
+  discovery document and from response headers observed on fasab.gov on 2026-09-09. The semantics are
+  WordPress core semantics; they are recorded here because they are what an agent calling fasab.gov
+  actually encounters.
+authentication:
+  style: none-for-read
+  detail: >-
+    No credential is required for any of the 28 public operations. HTTP Basic application passwords
+    govern the authenticated administrative surface only. See
+    authentication/federal-accounting-standards-advisory-board-authentication.yml.
+pagination:
+  style: page-number
+  request_params:
+  - {name: page, default: 1, description: 1-indexed page of the collection.}
+  - {name: per_page, default: 10, maximum: 100, description: Records per page.}
+  - {name: offset, description: Alternative to page — skip this many records.}
+  response_headers:
+  - {name: X-WP-Total, description: Total records matching the query.}
+  - {name: X-WP-TotalPages, description: Total pages at the current per_page.}
+  - {name: Link, description: 'RFC 5988 rel="next" / rel="prev" URLs.'}
+  cors_exposed: true
+  evidence:
+    url: https://fasab.gov/wp-json/wp/v2/posts?per_page=2
+    headers_observed: ['x-wp-total: 4', 'x-wp-totalpages: 2', 'link: <...page=2>; rel="next"', 'access-control-expose-headers: X-WP-Total, X-WP-TotalPages, Link']
+field_selection:
+  sparse_fields:
+    param: _fields
+    description: Comma-separated list restricting the fields returned per record.
+    verified: true
+    evidence: https://fasab.gov/wp-json/wp/v2/pages?per_page=3&_fields=id,slug,link,title
+  expansion:
+    param: _embed
+    description: Inlines linked resources (author, featured media, terms) under _embedded.
+    verified: false
+  context:
+    param: context
+    values: [view, embed, edit]
+    default: view
+    note: context=edit returns 401 anonymously.
+filtering_and_sorting:
+  search: {param: search, description: Free-text search within a collection.}
+  ordering: {params: [orderby, order], note: Enum values per collection are declared in the route index.}
+  date_windows: {params: [after, before, modified_after, modified_before]}
+  taxonomy: {params: [categories, categories_exclude, tags, tags_exclude]}
+  cross_type_search: {path: /wp/v2/search, params: [search, type, subtype]}
+hypermedia:
+  style: HAL-like _links
+  detail: >-
+    Every record carries a _links object with self, collection, about, author, replies and
+    wp:attachment relations, and each link carries targetHints.allow — which on fasab.gov reads
+    ["GET"], confirming the read-only posture per-resource.
+  evidence: examples/federal-accounting-standards-advisory-board-search.json
+versioning:
+  scheme: namespace-in-path
+  current: wp/v2
+  detail: >-
+    Version is the namespace segment (wp/v2). FASAB publishes no versioning policy of its own; the
+    namespace list is discoverable at https://fasab.gov/wp-json/.
+error_envelope:
+  format: wordpress-rest-error
+  rfc9457: false
+  shape: '{code, message, data:{status}}'
+  catalog: errors/federal-accounting-standards-advisory-board-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  documented: false
+  detail: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header was present on any observed response, and no
+    limit is documented. Responses carry cache-control: max-age=60 and an x-cache header (WordPress VIP
+    edge), so an agent's practical throughput is governed by edge caching rather than a published quota.
+  see: rate-limits/federal-accounting-standards-advisory-board-rate-limits.yml
+request_tracing:
+  request_id_header: null
+  note: >-
+    No client-settable request-id is documented. Responses carry an opaque `x-rq` header set by the
+    WordPress VIP edge; it is not a documented correlation contract and should not be relied on.
+caching:
+  response_headers: ['cache-control: max-age=60', 'x-cache: HIT|MISS', 'vary: Accept-Encoding, accept, content-type, Origin']
+  conditional_requests: {etag: false, last_modified: false, note: Neither ETag nor Last-Modified was returned on the probed responses.}
+idempotency:
+  coverage: na
+  mechanism: null
+  header: null
+  scope: []
+  note: >-
+    NOT APPLICABLE — the public surface is read-only. Collection responses carry `Allow: GET` and every
+    write method advertised in the route index answers 401 rest_forbidden anonymously, so there is no
+    mutating operation an agent could double-fire. All GETs are naturally idempotent. No Idempotency
+    pointer is emitted in apis.yml, because FASAB ships no idempotency contract.
+dry_run_mode:
+  supported: na
+  note: No write surface, so nothing to rehearse.
+reversibility:
+  applicable: false
+  grade: na
+  write_surface: none
+  reversal_operations: []
+  note: >-
+    NOT APPLICABLE — read-only API. No public operation creates, modifies or deletes state, so there is
+    nothing to cancel, refund, void or restore. Recorded as `na` rather than zero: FASAB is not withholding
+    a reversal path, it has no action to reverse. Re-evaluate if a write surface is ever opened anonymously.
+cross_links:
+  errors: errors/federal-accounting-standards-advisory-board-problem-types.yml
+  authentication: authentication/federal-accounting-standards-advisory-board-authentication.yml
+  lifecycle: lifecycle/federal-accounting-standards-advisory-board-lifecycle.yml
+  rate_limits: rate-limits/federal-accounting-standards-advisory-board-rate-limits.yml

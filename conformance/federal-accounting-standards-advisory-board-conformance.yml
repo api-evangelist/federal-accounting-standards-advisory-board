@@ -1,0 +1,72 @@
+generated: '2026-09-09'
+method: derived
+source: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+note: >-
+  Derived from the harvested contract and from live response behaviour on 2026-09-09. FASAB publishes
+  no compliance claims, no certifications and no trust centre, so no Compliance pointer is emitted.
+  A `conforms: false` row here is a measurement, not a criticism.
+standards:
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme; /.well-known/oauth-authorization-server returned 404 on both hosts.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returned 404 on fasab.gov and www.fasab.gov.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors are the WordPress envelope {code,message,data.status} with content-type application/json,
+    not application/problem+json. Observed on GET /wp/v2/settings (401), 2026-09-09.
+- id: rfc5988-web-linking
+  conforms: true
+  evidence: >-
+    Collection responses return Link headers with rel="next"/"prev" for paging, and records carry a
+    _links object. Observed on GET /wp/v2/posts?per_page=2, 2026-09-09.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returned 404 on fasab.gov and www.fasab.gov.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header on any observed response; no deprecation policy published.
+- id: oembed-1.0
+  conforms: true
+  evidence: >-
+    fasab.gov registers the oembed/1.0 namespace and GET /oembed/1.0/embed?url=https://fasab.gov/
+    returned a valid oEmbed 1.0 rich response (version 1.0, provider_name, author_name, html) on 2026-09-09.
+- id: wordpress-rest-api-v2
+  conforms: true
+  evidence: >-
+    The surface IS the WordPress REST API wp/v2 contract — self-describing route index at
+    https://fasab.gov/wp-json/, standard collection/item routes, standard args schemas, standard
+    X-WP-Total paging headers. This is the de facto interoperability standard that matters here: any
+    client written against WordPress wp/v2 works against fasab.gov with no bespoke connector.
+- id: cors
+  conforms: true
+  evidence: >-
+    access-control-expose-headers: X-WP-Total, X-WP-TotalPages, Link — the API is callable from a
+    browser and exposes its paging headers cross-origin.
+- id: sitemaps-0.9
+  conforms: true
+  evidence: >-
+    https://fasab.gov/sitemap.xml returned a valid sitemapindex in the sitemaps.org 0.9 namespace
+    (Jetpack-generated), referenced from https://fasab.gov/robots.txt. HTTP 200, 2026-09-09.
+domain_standards:
+  note: >-
+    REWARD-ONLY, and honestly empty. FASAB's domain is U.S. federal financial reporting — it AUTHORS
+    the domain standard (SFFAS, the FASAB Handbook, technical releases and interpretations) rather
+    than consuming one. But those pronouncements are published as PDFs on files.fasab.gov and are not
+    represented in any machine-readable form: there is no XBRL taxonomy, no SDMX, no ISO 20022 message
+    shape and no structured standards vocabulary anywhere in the contract or on the site. The API
+    exposes the PAGES that describe the standards, never the standards as data.
+  probed:
+  - {id: xbrl, present: false, evidence: 'No XBRL taxonomy, instance document or namespace found on fasab.gov; no XBRL route in the discovery document.'}
+  - {id: sdmx, present: false, evidence: No SDMX endpoint or structure message found.}
+  - {id: iso-20022, present: false, evidence: Not applicable — FASAB sets reporting standards, it does not exchange financial messages.}
+  entries: []
+compliance_program:
+  published: false
+  certifications: []
+  evidence: >-
+    No trust centre, no certifications page, no SOC 2 / ISO 27001 / FedRAMP claim.
+    probe-security-programs.py returned vdp=none trust=none on 2026-09-09.
+checked: '2026-09-09'

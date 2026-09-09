@@ -1,0 +1,54 @@
+generated: '2026-09-09'
+method: derived
+source: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+observed: https://fasab.gov/wp-json/wp/v2/settings
+format: wordpress-rest-error
+rfc9457: false
+note: >-
+  fasab.gov does NOT return application/problem+json. Its error envelope is the standard WordPress REST
+  shape — {"code": "...", "message": "...", "data": {"status": <int>}} — captured live on 2026-09-09 and
+  saved verbatim at examples/federal-accounting-standards-advisory-board-error-401.json. FASAB publishes
+  no error reference of its own; the codes below are the WordPress core codes this deployment can return
+  on the public read surface. Codes marked observed:true were seen on this host; the rest are derived
+  from the route index and WordPress core behaviour and are marked observed:false rather than asserted.
+envelope:
+  fields:
+  - {name: code, type: string, description: Machine-readable error slug.}
+  - {name: message, type: string, description: Human-readable message.}
+  - {name: data.status, type: integer, description: The HTTP status code, repeated inside the body.}
+problems:
+- code: rest_forbidden
+  status: 401
+  title: Not authorised
+  detail: The requested route, context or field requires authentication.
+  remediation: >-
+    The route is part of the administrative surface, not the public read API. There is no self-service
+    credential — application passwords are issued from wp-admin to FASAB site operators only.
+  observed: true
+  evidence: {url: 'https://fasab.gov/wp-json/wp/v2/settings', http_status: 401}
+- code: rest_no_route
+  status: 404
+  title: No route matched
+  detail: No registered REST route matched the requested URL and method.
+  remediation: Read the route index at https://fasab.gov/wp-json/ and use a path it lists.
+  observed: false
+- code: rest_post_invalid_id
+  status: 404
+  title: Invalid post id
+  detail: No post, page, media item or content block exists with the supplied numeric id.
+  remediation: List the collection first and use an id it returns.
+  observed: false
+- code: rest_invalid_param
+  status: 400
+  title: Invalid parameter
+  detail: A query parameter failed the schema declared for it in the route index.
+  remediation: >-
+    Check the parameter against the schema in the derived OpenAPI; per_page is capped at 100 and
+    context=edit/embed is restricted anonymously.
+  observed: false
+- code: rest_forbidden_context
+  status: 401
+  title: Context not permitted
+  detail: context=edit was requested without authentication.
+  remediation: Use the default context=view.
+  observed: false

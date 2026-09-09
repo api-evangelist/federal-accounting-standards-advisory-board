@@ -1,0 +1,56 @@
+generated: '2026-09-09'
+method: probed
+source: https://fasab.gov/wp-json/
+docs: null
+note: >-
+  FASAB publishes no authentication documentation. This profile records what the site's own WordPress
+  REST discovery document declares and what unauthenticated requests actually observed on 2026-09-09.
+  The public read surface requires NO credential at all — every one of the 28 operations in
+  openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml returned HTTP 200 anonymously.
+summary:
+  types:
+  - none
+  - basic
+  api_key_in: []
+  oauth2_flows: []
+  public_read: true
+schemes:
+- name: anonymous
+  type: none
+  description: >-
+    The public read surface. No Authorization header, API key, cookie or nonce is required; the
+    `security: [{}]` block in the derived OpenAPI reflects the observed behaviour. Verified against
+    /wp/v2/posts, /wp/v2/pages, /wp/v2/media, /wp/v2/search, /wp/v2/types, /wp/v2/taxonomies and the
+    route index on 2026-09-09.
+  sources:
+  - openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+  evidence:
+  - url: https://fasab.gov/wp-json/wp/v2/pages?per_page=1
+    http_status: 200
+    anonymous: true
+- name: application-passwords
+  type: http
+  scheme: basic
+  description: >-
+    WordPress Application Passwords, declared by fasab.gov itself in the `authentication` object of its
+    REST discovery document. Credentials are HTTP Basic (WordPress username + a generated application
+    password) and are issued interactively from wp-admin. This governs the AUTHENTICATED surface only —
+    the administrative and plugin namespaces that answer 401 rest_forbidden anonymously — and is
+    available to FASAB site operators, not to the public. There is no self-service registration.
+  authorization_endpoint: https://fasab.gov/wp-admin/authorize-application.php
+  sources:
+  - https://fasab.gov/wp-json/
+  evidence:
+  - url: https://fasab.gov/wp-json/
+    http_status: 200
+    field: authentication['application-passwords'].endpoints.authorization
+gated_surface:
+  note: Routes confirmed to require authentication (HTTP 401 rest_forbidden anonymously, 2026-09-09).
+  probes:
+  - {url: 'https://fasab.gov/wp-json/wp/v2/settings', http_status: 401}
+  - {url: 'https://fasab.gov/wp-json/wp/v2/plugins', http_status: 401}
+  - {url: 'https://fasab.gov/wp-json/wp/v2/themes', http_status: 401}
+  - {url: 'https://fasab.gov/wp-json/wp/v2/block-types', http_status: 401}
+  - {url: 'https://fasab.gov/wp-json/wp/v2/users/me', http_status: 401}
+  - {url: 'https://fasab.gov/wp-json/wp/v2/posts/12417/revisions', http_status: 401}
+  - {url: 'https://fasab.gov/wp-json/wp-abilities/v1/abilities', http_status: 401}

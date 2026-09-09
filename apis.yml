@@ -1,11 +1,13 @@
 aid: federal-accounting-standards-advisory-board
 name: Federal Accounting Standards Advisory Board
-description: >-
-  The Federal Accounting Standards Advisory Board (FASAB) is an independent
-  organization responsible for establishing accounting standards for the federal
-  government. FASAB strives to improve the quality and consistency of financial
-  reporting within federal agencies, ultimately ensuring transparency and
-  accountability in government financial operations.
+description: The Federal Accounting Standards Advisory Board (FASAB) is the U.S. federal advisory body designated
+  to set generally accepted accounting principles for the federal government and its component reporting entities.
+  FASAB issues Statements of Federal Financial Accounting Standards (SFFAS), technical releases, interpretations
+  and staff implementation guidance, consolidates them into the FASAB Handbook, and runs the public due-process
+  cycle of board and ASIC meetings, active projects and exposure drafts open for comment. FASAB publishes no developer
+  program or specification, but fasab.gov runs on WordPress and serves the WordPress REST API anonymously at https://fasab.gov/wp-json/
+  — a read-only surface over 402 pages, 214 media records, the site taxonomies and search, whose OpenAPI here was
+  derived from that live route index. The authoritative pronouncements remain PDFs on files.fasab.gov.
 type: Index
 deliveryModel:
   model: unknown
@@ -32,27 +34,113 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/federal-accounting-standards-advisory-board.png
 access: 3rd-Party
 created: '2024-12-25'
-modified: '2026-04-28'
-position: Consuming
+modified: '2026-09-09'
+position: Producing
 tags:
-  - Accounting
-  - Federal-Government
+- Accounting
+- Federal-Government
+- Standards
+- Financial-Reporting
+- Government
+- Regulations
+- Content
+- Publications
 tags_raw:
-  - Accounting
-  - Federal Government
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/apis.yml
+- Accounting
+- Federal Government
+- Standards
+- Financial Reporting
+- Government
+- Regulations
+- Content
+- Publications
+url: https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/apis.yml
 specificationVersion: '0.23'
-apis: []
+apis:
+- aid: federal-accounting-standards-advisory-board-wp-content
+  name: FASAB Public Content API (WordPress REST)
+  description: 'The anonymous, read-only WordPress REST API behind fasab.gov. Serves FASAB''s site pages (Standards
+    & Guidance, handbook-by-chapter, active and archived projects, board and ASIC meeting material, briefing documents,
+    training and the resources library), its small post corpus, the media library, the category/tag/Link Library
+    taxonomies, public author records and cross-type site search. DERIVED contract — FASAB publishes no specification;
+    the OpenAPI here was derived from the live route discovery document at https://fasab.gov/wp-json/ (saved verbatim
+    alongside it) and all 28 operations were confirmed HTTP 200 to unauthenticated requests on 2026-09-09. Read-only:
+    collection responses carry Allow: GET and the entire administrative and plugin surface answers 401 rest_forbidden
+    anonymously. The authoritative FASAB Handbook, SFFAS statements and technical releases are PDFs on files.fasab.gov
+    linked from page content, not records in this API.'
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/federal-accounting-standards-advisory-board.png
+  humanURL: https://fasab.gov/
+  baseURL: https://fasab.gov/wp-json
+  tags:
+  - Accounting
+  - Standards
+  - Federal-Government
+  - Content
+  - Publications
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+  - type: Overlay
+    url: overlays/federal-accounting-standards-advisory-board-wp-content-overlay.yaml
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-pages.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-posts.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-media.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-search.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-categories.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-error-401.json
 common:
-  - type: DomainSecurity
-    url: security/federal-accounting-standards-advisory-board-domain-security.yml
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/federal-accounting-standards-advisory-board
-  - type: Website
-    url: https://fasab.gov/
-  - url: https://fasab.gov/feed/
-    type: Blog
+- type: DomainSecurity
+  url: security/federal-accounting-standards-advisory-board-domain-security.yml
+- type: LinkedIn
+  url: https://www.linkedin.com/company/federal-accounting-standards-advisory-board
+- type: Website
+  url: https://fasab.gov/
+- type: OpenAPI
+  url: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+- type: Authentication
+  url: authentication/federal-accounting-standards-advisory-board-authentication.yml
+- type: Conventions
+  url: conventions/federal-accounting-standards-advisory-board-conventions.yml
+- type: ErrorCatalog
+  url: errors/federal-accounting-standards-advisory-board-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/federal-accounting-standards-advisory-board-lifecycle.yml
+- type: Conformance
+  url: conformance/federal-accounting-standards-advisory-board-conformance.yml
+- type: DataModel
+  url: data-model/federal-accounting-standards-advisory-board-data-model.yml
+- type: RateLimits
+  url: rate-limits/federal-accounting-standards-advisory-board-rate-limits.yml
+- type: Plans
+  url: plans/federal-accounting-standards-advisory-board-plans-pricing.yml
+- type: Packages
+  url: packages/federal-accounting-standards-advisory-board-packages.yml
+- type: X-MCPServerCandidate
+  url: mcp/federal-accounting-standards-advisory-board-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/federal-accounting-standards-advisory-board-llms.txt
+- type: Overlay
+  url: overlays/federal-accounting-standards-advisory-board-wp-content-overlay.yaml
+- type: Blog
+  url: https://fasab.gov/newsroom/
+- type: BlogRSS
+  url: https://fasab.gov/feed/
+- type: Support
+  url: https://fasab.gov/about-fasab/contact-information/
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-09-09'
+  status: enriched
+  artifacts_added: 24
+  pass: local-v3

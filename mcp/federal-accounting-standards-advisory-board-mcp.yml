@@ -1,0 +1,63 @@
+generated: '2026-09-09'
+method: derived
+status: candidate
+source: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+note: >-
+  FASAB ships NO MCP server. No hosted endpoint, no stdio package, nothing in the npm or PyPI
+  registries, no mention anywhere on fasab.gov. The tools below are a CANDIDATE set derived from the
+  read operations in the harvested contract — a proposal for what an MCP server over FASAB content
+  would expose, not a surface anyone can call today. Each tool's real input schema is the parameter
+  block of its backing operation in the OpenAPI. No endpoint URL is invented.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: derived
+  note: >-
+    mode: none because nobody ships a server. auth is recorded as none because the underlying
+    operations are all anonymous — if a server were built, it would need no credential.
+server:
+  name: fasab-content
+  transport: null
+  url: null
+tools:
+- name: search_fasab
+  description: Search FASAB content by keyword across pages and posts; returns id, title, url and type.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#search
+- name: list_pages
+  description: List FASAB site pages — standards and guidance, projects, board meetings, training, resources.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#listPages
+- name: get_page
+  description: Retrieve one FASAB page by id, including its rendered content.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#getPage
+- name: list_posts
+  description: List FASAB posts (podcast episodes and interviews).
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#listPosts
+- name: get_post
+  description: Retrieve one FASAB post by id.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#getPost
+- name: list_media
+  description: List media library records with their source URLs and MIME types.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#listMedia
+- name: get_media_item
+  description: Retrieve one media/document record by id.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#getMediaItem
+- name: list_categories
+  description: List the category taxonomy terms applied to FASAB posts.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#listCategories
+- name: list_tags
+  description: List the tag taxonomy terms applied to FASAB pages and posts.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#listTags
+- name: list_content_types
+  description: Describe the content shapes this site registers, with their field schemas.
+  source_operation: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml#listContentTypes
+coverage:
+  rest_operations_total: 28
+  tools_proposed: 10
+  note: >-
+    The 18 unmapped operations are discovery and taxonomy detail routes (route indexes, statuses,
+    taxonomy and content-type item lookups, oEmbed, comments, block patterns, Link Library taxonomies
+    and author records) that a server would fold into the tools above rather than expose one-for-one.
+checked: '2026-09-09'

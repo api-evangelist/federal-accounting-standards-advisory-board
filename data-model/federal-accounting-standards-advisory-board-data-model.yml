@@ -1,0 +1,110 @@
+generated: '2026-09-09'
+method: derived
+source: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+observed:
+- https://fasab.gov/wp-json/wp/v2/types
+- https://fasab.gov/wp-json/wp/v2/taxonomies
+note: >-
+  Derived from the live /wp/v2/types and /wp/v2/taxonomies registration records and from the _links
+  relations present on real fasab.gov responses (2026-09-09). Only the entities reachable ANONYMOUSLY
+  are modelled; the administrative post types the route index also registers (feedback, jetpack_form,
+  jp_act_log_event, jp_pay_order, jp_pay_product, wp_template, wp_navigation, wp_font_family and the
+  rest) answer 401 and are excluded.
+id_scheme:
+  form: integer
+  note: >-
+    Every entity is keyed by a WordPress numeric post or term id. There is no prefixed or namespaced
+    identifier, and ids are not stable across a site migration. Records also expose a `slug` and a
+    permalink `link` which are the more durable external handles.
+entities:
+- name: page
+  rest_base: pages
+  path: /wp/v2/pages
+  count_at_harvest: 402
+  description: >-
+    The primary FASAB content corpus — Standards & Guidance, handbook-by-chapter, active and archived
+    projects, board meeting and briefing pages, ASIC, training courses and the resources library.
+  key_fields: [id, slug, link, title.rendered, content.rendered, excerpt.rendered, date, modified, author, parent, menu_order, tags]
+- name: post
+  rest_base: posts
+  path: /wp/v2/posts
+  count_at_harvest: 4
+  description: Blog-style posts — the FASAB podcast episodes and Exposure Draft chat interviews.
+  key_fields: [id, slug, link, title.rendered, content.rendered, date, modified, author, categories, tags]
+- name: attachment
+  rest_base: media
+  path: /wp/v2/media
+  count_at_harvest: 214
+  description: >-
+    Media library records — uploaded images and files, each with a source_url and mime_type. Note that
+    the authoritative FASAB PDFs (Handbook, SFFAS, technical releases) are served from files.fasab.gov
+    and referenced from page content; they are largely NOT attachment records here.
+  key_fields: [id, slug, link, title.rendered, source_url, mime_type, media_type, date, author, post]
+- name: content_block
+  rest_base: content_block
+  path: /wp/v2/content_block
+  count_at_harvest: 41
+  description: A site-specific custom post type holding reusable content fragments composed into pages.
+  key_fields: [id, slug, title.rendered, content.rendered, date, modified]
+- name: category
+  rest_base: categories
+  path: /wp/v2/categories
+  count_at_harvest: 2
+  description: Hierarchical taxonomy term applied to posts.
+  key_fields: [id, slug, name, description, parent, count, link]
+- name: tag
+  rest_base: tags
+  path: /wp/v2/tags
+  count_at_harvest: 10
+  description: Flat taxonomy term applied to both posts and pages.
+  key_fields: [id, slug, name, description, count, link]
+- name: link_library_category
+  rest_base: link_library_category
+  path: /wp/v2/link_library_category
+  description: Taxonomy grouping the external "Links to Other Helpful Websites" resource list.
+  key_fields: [id, slug, name, count, link]
+- name: link_library_tag
+  rest_base: link_library_tags
+  path: /wp/v2/link_library_tags
+  description: Second Link Library taxonomy.
+  key_fields: [id, slug, name, count, link]
+- name: user
+  rest_base: users
+  path: /wp/v2/users
+  count_at_harvest: 7
+  description: >-
+    Public author record for a FASAB staff member who publishes content. Anonymous responses expose
+    only name, slug, description, link and avatar_urls; email, roles and capabilities are withheld.
+  key_fields: [id, name, slug, description, link, avatar_urls]
+- name: comment
+  rest_base: comments
+  path: /wp/v2/comments
+  count_at_harvest: 0
+  description: Comment records. The collection is registered and readable but empty on fasab.gov.
+  key_fields: [id, post, author_name, content.rendered, date]
+relationships:
+- {from: post, to: user, kind: belongs_to, via: author, evidence: '_links.author on /wp/v2/posts records'}
+- {from: post, to: category, kind: has_many, via: categories, evidence: 'categories[] id array + _links["wp:term"]'}
+- {from: post, to: tag, kind: has_many, via: tags, evidence: 'tags[] id array + _links["wp:term"]'}
+- {from: post, to: attachment, kind: has_many, via: featured_media / wp:attachment, evidence: '_links["wp:attachment"]'}
+- {from: post, to: comment, kind: has_many, via: replies, evidence: '_links.replies'}
+- {from: page, to: user, kind: belongs_to, via: author, evidence: '_links.author on /wp/v2/pages records'}
+- {from: page, to: page, kind: belongs_to, via: parent, evidence: 'parent field + _links.up on hierarchical pages'}
+- {from: page, to: tag, kind: has_many, via: tags, evidence: 'post_tag taxonomy lists page in its types[]'}
+- {from: page, to: attachment, kind: has_many, via: wp:attachment, evidence: '_links["wp:attachment"]'}
+- {from: attachment, to: page, kind: belongs_to, via: post, evidence: 'post field on attachment records'}
+- {from: attachment, to: user, kind: belongs_to, via: author, evidence: '_links.author'}
+- {from: category, to: category, kind: belongs_to, via: parent, evidence: 'hierarchical:true in /wp/v2/taxonomies'}
+- {from: comment, to: post, kind: belongs_to, via: post, evidence: 'post field on comment records'}
+entry_points:
+  note: The two useful ways in for an agent.
+  by_keyword: {operation: search, path: /wp/v2/search, returns: 'id, title, url, type, subtype across pages and posts'}
+  by_collection: {operation: listPages, path: /wp/v2/pages, note: 'page through 402 records with per_page + page; use _fields to keep responses small'}
+gaps:
+  - >-
+    THE STANDARDS THEMSELVES ARE NOT ENTITIES. There is no SFFAS, statement, technical release,
+    interpretation, project or board-meeting entity in this model, because FASAB registers no such
+    post type. Those live inside page HTML and inside PDFs on files.fasab.gov. A consumer wanting
+    structured pronouncement data must parse page content; the API will not hand it over as records.
+render: null
+checked: '2026-09-09'

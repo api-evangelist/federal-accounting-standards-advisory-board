@@ -1,0 +1,66 @@
+# Federal Accounting Standards Advisory Board (FASAB)
+
+> FASAB is the U.S. federal advisory board that sets generally accepted accounting principles for the
+> federal government and its component reporting entities. It publishes the FASAB Handbook, Statements
+> of Federal Financial Accounting Standards (SFFAS), technical releases, interpretations and staff
+> implementation guidance, and runs the board and ASIC meeting process behind them.
+>
+> FASAB publishes NO developer program, NO API documentation and NO machine-readable specification.
+> Its website runs on WordPress and serves the standard WordPress REST API anonymously at
+> https://fasab.gov/wp-json/ — a real, callable, read-only content API over 402 pages, 4 posts,
+> 214 media records and site search. The OpenAPI below was DERIVED by API Evangelist from that live
+> route discovery document on 2026-09-09; every operation in it was confirmed HTTP 200 anonymously.
+> FASAB did not author, publish or endorse it.
+>
+> IMPORTANT LIMIT: the authoritative pronouncements are PDFs on files.fasab.gov, linked from page
+> content. This API will tell you which page carries a standard and where its PDF lives. It will not
+> give you the text of a standard as structured data.
+
+## APIs
+
+- [FASAB Public Content API (WordPress REST)](https://fasab.gov/wp-json/): Anonymous read-only access
+  to FASAB pages, posts, media, taxonomies, authors and site search. 28 verified operations. No key required.
+
+## Specs
+
+- [OpenAPI 3.1 (derived)](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml): 28 operations, derived from the live route index.
+- [WordPress route discovery document (verbatim)](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/openapi/federal-accounting-standards-advisory-board-wp-routes-original.json): the 519-route source document, saved as fetched.
+- [OpenAPI Overlay](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/overlays/federal-accounting-standards-advisory-board-wp-content-overlay.yaml): API Evangelist enhancements.
+
+## Artifacts
+
+- [Authentication](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/authentication/federal-accounting-standards-advisory-board-authentication.yml): none required for read; WordPress application passwords gate the admin surface.
+- [Conventions](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/conventions/federal-accounting-standards-advisory-board-conventions.yml): paging, _fields, hypermedia _links, caching, error envelope; read-only so idempotency and reversibility are n/a.
+- [Error catalog](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/errors/federal-accounting-standards-advisory-board-problem-types.yml): the WordPress {code,message,data.status} envelope — not RFC 9457.
+- [Data model](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/data-model/federal-accounting-standards-advisory-board-data-model.yml): entities and relationships reachable anonymously.
+- [Lifecycle](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/lifecycle/federal-accounting-standards-advisory-board-lifecycle.yml): no versioning policy, no deprecation policy, no SLA, no status page.
+- [Rate limits](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/rate-limits/federal-accounting-standards-advisory-board-rate-limits.yml): none documented and none observable; per_page capped at 100.
+- [Plans and pricing](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/plans/federal-accounting-standards-advisory-board-plans-pricing.yml): none — a federal advisory board, free to the public.
+- [Conformance](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/conformance/federal-accounting-standards-advisory-board-conformance.yml): WordPress wp/v2, oEmbed 1.0, RFC 5988 linking, sitemaps 0.9; no OAuth, OIDC, RFC 9457 or security.txt.
+- [Well-known probe](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/well-known/federal-accounting-standards-advisory-board-well-known.yml): every named path 404s on both hosts, negative control passed.
+- [MCP candidate](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/mcp/federal-accounting-standards-advisory-board-mcp.yml): no server exists; a derived candidate tool list only.
+- [Agent skills](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/skills/_index.yml): packaged operating instructions for finding FASAB standards and documents.
+- [Examples](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/examples/): real anonymous responses captured 2026-09-09.
+
+## Docs
+
+- [FASAB website](https://fasab.gov/)
+- [Standards and Guidance](https://fasab.gov/accounting-standards/)
+- [Handbook by Chapter](https://fasab.gov/accounting-standards/document-by-chapter/)
+- [Current FASAB Handbook (PDF)](https://files.fasab.gov/pdffiles/2025_FASAB_Handbook.pdf)
+- [Original Pronouncements (Unamended)](https://fasab.gov/resources/original-pronouncements/)
+- [Active Projects](https://fasab.gov/projects/active-projects/)
+- [Board Meetings](https://fasab.gov/board-activities/meeting/)
+- [Documents For Comment](https://fasab.gov/board-activities/documents-for-comment/)
+- [Newsroom](https://fasab.gov/newsroom/)
+- [Contact Information](https://fasab.gov/about-fasab/contact-information/)
+- [RSS feed](https://fasab.gov/feed/)
+
+## What does not exist
+
+- No developer portal, API reference, getting-started guide or support channel for the API.
+- No SDKs or client libraries in any registry; no CLI; no Postman collection.
+- No GitHub organisation (api.github.com/orgs/fasab returned 404 on 2026-09-09).
+- No MCP server, no A2A agent card, no /llms.txt, no /.well-known/ documents of any kind.
+- No webhooks, no events, no AsyncAPI, no GraphQL, no gRPC and no SOAP surface.
+- No status page, no changelog, no sandbox, no OAuth scopes, no trust centre and no published certifications.

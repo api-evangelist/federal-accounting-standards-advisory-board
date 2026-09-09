@@ -1,0 +1,3419 @@
+openapi: 3.1.0
+info:
+  title: FASAB Public Content API (WordPress REST)
+  version: wp/v2
+  summary: The anonymous, read-only WordPress REST API serving fasab.gov content — federal accounting standards pages, board
+    and project material, the media library, taxonomies and site search.
+  description: |-
+    The Federal Accounting Standards Advisory Board publishes no developer program, no API documentation and no machine-readable specification of its own. Its website, fasab.gov, runs on WordPress VIP and serves the standard WordPress REST API anonymously at https://fasab.gov/wp-json/ , and that surface is a real, callable, machine-readable read API over FASAB content: 402 pages (Standards & Guidance, handbook-by-chapter, active and archived projects, board meetings and briefing materials, ASIC, training and the resources library), 4 posts, 214 media records, 41 reusable content blocks, the site's taxonomies, its public author records and cross-type site search.
+
+    THIS DOCUMENT IS DERIVED, NOT PUBLISHED BY FASAB. Every path, method, parameter and parameter schema below comes from the live WordPress route discovery document at https://fasab.gov/wp-json/ , saved verbatim alongside this file as federal-accounting-standards-advisory-board-wp-routes-original.json (519 routes). Every operation listed here was individually confirmed to return HTTP 200 to an unauthenticated request on 2026-09-09; the confirming URL and status are recorded on each operation as x-verified.
+
+    READ ONLY, AND DELIBERATELY SO. Collection responses carry `Allow: GET`. The route index advertises POST/PUT/PATCH/DELETE on most content routes and a large administrative and plugin surface (settings, plugins, themes, widgets, templates, block-types, revisions, users/me, application-passwords, and the jetpack/v4, wpcom/v2, vip/v1, akismet/v1, cron-control/v1, two-factor/1.0, publishpress-future/v1, jetpack-boost/v1, my-jetpack/v1, wp-site-health/v1, wp-block-editor/v1, form_maker/v1, amp/v1 and wp-abilities/v1 namespaces). All of it requires authentication — /wp/v2/settings, /wp/v2/plugins, /wp/v2/themes, /wp/v2/block-types, /wp/v2/users/me, /wp/v2/posts/{id}/revisions and /wp-abilities/v1/abilities each returned 401 rest_forbidden anonymously on 2026-09-09 — so none of it is a public API and none of it is modelled here.
+
+    WHAT THIS API IS NOT. The authoritative FASAB pronouncements themselves — the FASAB Handbook, SFFAS statements, technical releases and interpretations — are published as PDFs on files.fasab.gov and are linked from page content. They are not exposed as structured records by this API. An agent can use this API to find the page that carries a standard and the URL of its PDF; it cannot query the text of a standard as data.
+  contact:
+    name: FASAB
+    email: fasab@fasab.gov
+    url: https://fasab.gov/about-fasab/contact-information/
+  license:
+    name: U.S. Government Work (17 U.S.C. Sec. 105)
+    url: https://fasab.gov/
+  x-provenance:
+    method: derived
+    source: https://fasab.gov/wp-json/
+    derived: '2026-09-09'
+    verbatim_source_file: openapi/federal-accounting-standards-advisory-board-wp-routes-original.json
+    note: Derived by API Evangelist from the live WordPress route discovery document served by fasab.gov. Not authored,
+      published or endorsed by FASAB.
+servers:
+- url: https://fasab.gov/wp-json
+  description: WordPress REST root on fasab.gov. Verified reachable and anonymous on 2026-09-09. www.fasab.gov serves the
+    identical site.
+security:
+- {}
+tags:
+- name: Pages
+  description: FASAB site pages — standards and guidance, projects, board meetings, ASIC, training, resources.
+- name: News
+  description: Posts and comments.
+- name: Documents
+  description: The media library of uploaded files and images.
+- name: Taxonomy
+  description: Categories, tags and the Link Library taxonomies.
+- name: Authors
+  description: Public author records for FASAB staff who publish content.
+- name: Search
+  description: Cross-type site search.
+- name: Discovery
+  description: Route index, content types, taxonomies, statuses and oEmbed.
+paths:
+  /:
+    get:
+      operationId: getRouteIndex
+      summary: Route discovery index
+      description: The WordPress REST API root. Returns the site name, home URL, the list of registered namespaces and the
+        full route index — 519 routes, of which the 29 modelled in this document are the ones reachable without authentication.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          default: view
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2:
+    get:
+      operationId: getWpV2Namespace
+      summary: wp/v2 namespace index
+      description: Route index scoped to the wp/v2 namespace — the WordPress core content namespace this document models.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: namespace
+        in: query
+        required: false
+        schema:
+          default: wp/v2
+      - name: context
+        in: query
+        required: false
+        schema:
+          default: view
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/posts:
+    get:
+      operationId: listPosts
+      summary: List FASAB posts
+      description: Blog-style posts published to fasab.gov. Four records at harvest (2026-09-09) — the FASAB podcast episodes
+        and Exposure Draft chat interviews — classified with the `category` taxonomy. FASAB publishes the bulk of its content
+        as pages, not posts.
+      tags:
+      - News
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published after a given ISO8601 compliant date.
+      - name: modified_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified after a given ISO8601 compliant date.
+      - name: author
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to posts assigned to specific authors.
+      - name: author_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes posts assigned to specific authors.
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published before a given ISO8601 compliant date.
+      - name: modified_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified before a given ISO8601 compliant date.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: search_semantics
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - exact
+        description: How to interpret the search input.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - include_slugs
+          - title
+          default: date
+        description: Sort collection by post attribute.
+      - name: search_columns
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post_title
+            - post_content
+            - post_excerpt
+          default: []
+        description: Array of column names to be searched.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to posts with one or more specific slugs.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - publish
+            - future
+            - draft
+            - pending
+            - private
+            - trash
+            - auto-draft
+            - inherit
+            - request-pending
+            - request-confirmed
+            - request-failed
+            - request-completed
+            - spam
+            - jp-temp-feedback
+            - any
+          default: publish
+        description: Limit result set to posts assigned one or more statuses.
+      - name: tax_relation
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+        description: Limit result set based on relationship between multiple taxonomies.
+      - name: categories
+        in: query
+        required: false
+        schema:
+          type: object
+        description: Limit result set to items with specific terms assigned in the categories taxonomy.
+      - name: categories_exclude
+        in: query
+        required: false
+        schema:
+          type: object
+        description: Limit result set to items except those with specific terms assigned in the categories taxonomy.
+      - name: tags
+        in: query
+        required: false
+        schema:
+          type: object
+        description: Limit result set to items with specific terms assigned in the tags taxonomy.
+      - name: tags_exclude
+        in: query
+        required: false
+        schema:
+          type: object
+        description: Limit result set to items except those with specific terms assigned in the tags taxonomy.
+      - name: sticky
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Limit result set to items that are sticky.
+      - name: ignore_sticky
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: true
+        description: Whether to ignore sticky posts or not.
+      - name: format
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - standard
+            - aside
+            - chat
+            - gallery
+            - link
+            - image
+            - quote
+            - status
+            - video
+            - audio
+        description: Limit result set to items assigned one or more given formats.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/posts
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/posts/{id}:
+    get:
+      operationId: getPost
+      summary: Retrieve a post
+      description: Retrieve a single post by numeric id.
+      tags:
+      - News
+      security:
+      - {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the post.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: excerpt_length
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Override the default excerpt length.
+      - name: password
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The password for the post if it is password protected.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/posts/12417
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/pages:
+    get:
+      operationId: listPages
+      summary: List FASAB pages
+      description: 'The main FASAB content corpus: 402 pages at harvest, covering Standards & Guidance, the handbook-by-chapter
+        index, active and archived projects, board meetings and briefing materials, ASIC, training courses, and the resources
+        library. This is the collection most useful to a machine reading FASAB.'
+      tags:
+      - Pages
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published after a given ISO8601 compliant date.
+      - name: modified_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified after a given ISO8601 compliant date.
+      - name: author
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to posts assigned to specific authors.
+      - name: author_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes posts assigned to specific authors.
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published before a given ISO8601 compliant date.
+      - name: modified_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified before a given ISO8601 compliant date.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: menu_order
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Limit result set to posts with a specific menu_order value.
+      - name: search_semantics
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - exact
+        description: How to interpret the search input.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - include_slugs
+          - title
+          - menu_order
+          default: date
+        description: Sort collection by post attribute.
+      - name: parent
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to items with particular parent IDs.
+      - name: parent_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to all items except those of a particular parent ID.
+      - name: search_columns
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post_title
+            - post_content
+            - post_excerpt
+          default: []
+        description: Array of column names to be searched.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to posts with one or more specific slugs.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - publish
+            - future
+            - draft
+            - pending
+            - private
+            - trash
+            - auto-draft
+            - inherit
+            - request-pending
+            - request-confirmed
+            - request-failed
+            - request-completed
+            - spam
+            - jp-temp-feedback
+            - any
+          default: publish
+        description: Limit result set to posts assigned one or more statuses.
+      - name: tax_relation
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+        description: Limit result set based on relationship between multiple taxonomies.
+      - name: tags
+        in: query
+        required: false
+        schema:
+          type: object
+        description: Limit result set to items with specific terms assigned in the tags taxonomy.
+      - name: tags_exclude
+        in: query
+        required: false
+        schema:
+          type: object
+        description: Limit result set to items except those with specific terms assigned in the tags taxonomy.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/pages
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/pages/{id}:
+    get:
+      operationId: getPage
+      summary: Retrieve a page
+      description: Retrieve a single page by numeric id, including its rendered content.
+      tags:
+      - Pages
+      security:
+      - {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the post.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: excerpt_length
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Override the default excerpt length.
+      - name: password
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The password for the post if it is password protected.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/pages/22216
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/media:
+    get:
+      operationId: listMedia
+      summary: List media / document library
+      description: The media library — 214 items at harvest. This is where FASAB attaches uploaded documents and images.
+        Note that the large authoritative PDFs (the FASAB Handbook, SFFAS statements, technical releases) are served from
+        files.fasab.gov and are linked from page content rather than being media records here.
+      tags:
+      - Documents
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published after a given ISO8601 compliant date.
+      - name: modified_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified after a given ISO8601 compliant date.
+      - name: author
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to posts assigned to specific authors.
+      - name: author_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes posts assigned to specific authors.
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published before a given ISO8601 compliant date.
+      - name: modified_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified before a given ISO8601 compliant date.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: search_semantics
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - exact
+        description: How to interpret the search input.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - include_slugs
+          - title
+          default: date
+        description: Sort collection by post attribute.
+      - name: parent
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to items with particular parent IDs.
+      - name: parent_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to all items except those of a particular parent ID.
+      - name: search_columns
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post_title
+            - post_content
+            - post_excerpt
+          default: []
+        description: Array of column names to be searched.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to posts with one or more specific slugs.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - inherit
+            - private
+            - trash
+          default: inherit
+        description: Limit result set to posts assigned one or more statuses.
+      - name: media_type
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - image
+            - video
+            - text
+            - application
+            - audio
+        description: Limit result set to attachments of a particular media type or media types.
+      - name: mime_type
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to attachments of a particular MIME type or MIME types.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/media
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/media/{id}:
+    get:
+      operationId: getMediaItem
+      summary: Retrieve a media item
+      description: Retrieve a single media/attachment record, including its source URL and MIME type.
+      tags:
+      - Documents
+      security:
+      - {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the post.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/media/21908
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/content_block:
+    get:
+      operationId: listContentBlocks
+      summary: List reusable content blocks
+      description: A site-specific custom post type ("Content Blocks") holding 41 reusable content fragments composed into
+        FASAB pages.
+      tags:
+      - Pages
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published after a given ISO8601 compliant date.
+      - name: modified_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified after a given ISO8601 compliant date.
+      - name: author
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to posts assigned to specific authors.
+      - name: author_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes posts assigned to specific authors.
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published before a given ISO8601 compliant date.
+      - name: modified_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified before a given ISO8601 compliant date.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: search_semantics
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - exact
+        description: How to interpret the search input.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - include_slugs
+          - title
+          default: date
+        description: Sort collection by post attribute.
+      - name: search_columns
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post_title
+            - post_content
+            - post_excerpt
+          default: []
+        description: Array of column names to be searched.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to posts with one or more specific slugs.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - publish
+            - future
+            - draft
+            - pending
+            - private
+            - trash
+            - auto-draft
+            - inherit
+            - request-pending
+            - request-confirmed
+            - request-failed
+            - request-completed
+            - spam
+            - jp-temp-feedback
+            - any
+          default: publish
+        description: Limit result set to posts assigned one or more statuses.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/content_block
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/content_block/{id}:
+    get:
+      operationId: getContentBlock
+      summary: Retrieve a content block
+      description: Retrieve a single reusable content block by numeric id.
+      tags:
+      - Pages
+      security:
+      - {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the post.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: password
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The password for the post if it is password protected.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/content_block/18247
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/blocks:
+    get:
+      operationId: listPatterns
+      summary: List editor block patterns
+      description: Reusable Gutenberg block patterns. Empty on fasab.gov at harvest (0 records) — the route is registered
+        and answers anonymously.
+      tags:
+      - Pages
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published after a given ISO8601 compliant date.
+      - name: modified_after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified after a given ISO8601 compliant date.
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts published before a given ISO8601 compliant date.
+      - name: modified_before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to posts modified before a given ISO8601 compliant date.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: search_semantics
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - exact
+        description: How to interpret the search input.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - author
+          - date
+          - id
+          - include
+          - modified
+          - parent
+          - relevance
+          - slug
+          - include_slugs
+          - title
+          default: date
+        description: Sort collection by post attribute.
+      - name: search_columns
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post_title
+            - post_content
+            - post_excerpt
+          default: []
+        description: Array of column names to be searched.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to posts with one or more specific slugs.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - publish
+            - future
+            - draft
+            - pending
+            - private
+            - trash
+            - auto-draft
+            - inherit
+            - request-pending
+            - request-confirmed
+            - request-failed
+            - request-completed
+            - spam
+            - jp-temp-feedback
+            - any
+          default: publish
+        description: Limit result set to posts assigned one or more statuses.
+      - name: tax_relation
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - AND
+          - OR
+        description: Limit result set based on relationship between multiple taxonomies.
+      - name: wp_pattern_category
+        in: query
+        required: false
+        schema:
+          type: object
+        description: Limit result set to items with specific terms assigned in the wp_pattern_category taxonomy.
+      - name: wp_pattern_category_exclude
+        in: query
+        required: false
+        schema:
+          type: object
+        description: Limit result set to items except those with specific terms assigned in the wp_pattern_category taxonomy.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/blocks
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/categories:
+    get:
+      operationId: listCategories
+      summary: List categories
+      description: 'The `category` taxonomy applied to posts. Two terms at harvest: Podcasts and Uncategorized.'
+      tags:
+      - Taxonomy
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - id
+          - include
+          - name
+          - slug
+          - include_slugs
+          - term_group
+          - description
+          - count
+          default: name
+        description: Sort collection by term attribute.
+      - name: hide_empty
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: Whether to hide terms not assigned to any posts.
+      - name: parent
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Limit result set to terms assigned to a specific parent.
+      - name: post
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Limit result set to terms assigned to a specific post.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to terms with one or more specific slugs.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/categories
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/categories/{id}:
+    get:
+      operationId: getCategory
+      summary: Retrieve a category
+      description: Retrieve a single category term by numeric id.
+      tags:
+      - Taxonomy
+      security:
+      - {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the term.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/categories/4
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/tags:
+    get:
+      operationId: listTags
+      summary: List tags
+      description: The `post_tag` taxonomy, applied to both posts and pages. Ten terms at harvest, including FASAB-specific
+        labels such as "AAPC Docs for Comment".
+      tags:
+      - Taxonomy
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - id
+          - include
+          - name
+          - slug
+          - include_slugs
+          - term_group
+          - description
+          - count
+          default: name
+        description: Sort collection by term attribute.
+      - name: hide_empty
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: Whether to hide terms not assigned to any posts.
+      - name: post
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Limit result set to terms assigned to a specific post.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to terms with one or more specific slugs.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/tags
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/tags/{id}:
+    get:
+      operationId: getTag
+      summary: Retrieve a tag
+      description: Retrieve a single tag term by numeric id.
+      tags:
+      - Taxonomy
+      security:
+      - {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the term.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/tags/12
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/link_library_category:
+    get:
+      operationId: listLinkLibraryCategories
+      summary: List Link Library categories
+      description: Taxonomy registered by the Link Library plugin, used to group the "Links to Other Helpful Websites" resource
+        list.
+      tags:
+      - Taxonomy
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - id
+          - include
+          - name
+          - slug
+          - include_slugs
+          - term_group
+          - description
+          - count
+          default: name
+        description: Sort collection by term attribute.
+      - name: hide_empty
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: Whether to hide terms not assigned to any posts.
+      - name: parent
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Limit result set to terms assigned to a specific parent.
+      - name: post
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Limit result set to terms assigned to a specific post.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to terms with one or more specific slugs.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/link_library_category
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/link_library_tags:
+    get:
+      operationId: listLinkLibraryTags
+      summary: List Link Library tags
+      description: Second taxonomy registered by the Link Library plugin for the external-links resource list.
+      tags:
+      - Taxonomy
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - id
+          - include
+          - name
+          - slug
+          - include_slugs
+          - term_group
+          - description
+          - count
+          default: name
+        description: Sort collection by term attribute.
+      - name: hide_empty
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: Whether to hide terms not assigned to any posts.
+      - name: post
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Limit result set to terms assigned to a specific post.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to terms with one or more specific slugs.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/link_library_tags
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/users:
+    get:
+      operationId: listAuthors
+      summary: List content authors
+      description: Public author records for staff who publish content — seven at harvest. Anonymous responses carry only
+        the public fields (name, slug, description, link, avatar); email and role are omitted without authentication.
+      tags:
+      - Authors
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: asc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - id
+          - include
+          - name
+          - registered_date
+          - slug
+          - include_slugs
+          - email
+          - url
+          default: name
+        description: Sort collection by user attribute.
+      - name: slug
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to users with one or more specific slugs.
+      - name: roles
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to users matching at least one specific role provided. Accepts csv list or single
+          role.
+      - name: capabilities
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        description: Limit result set to users matching at least one specific capability provided. Accepts csv list or single
+          capability.
+      - name: who
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - authors
+        description: Limit result set to users who are considered authors.
+      - name: has_published_posts
+        in: query
+        required: false
+        schema:
+          type: boolean
+          items:
+            type: string
+            enum:
+              post: post
+              page: page
+              attachment: attachment
+              nav_menu_item: nav_menu_item
+              wp_block: wp_block
+              wp_template: wp_template
+              wp_template_part: wp_template_part
+              wp_global_styles: wp_global_styles
+              wp_navigation: wp_navigation
+              wp_font_family: wp_font_family
+              wp_font_face: wp_font_face
+              jp_search_overlay: jp_search_overlay
+              feedback: feedback
+              jetpack_form: jetpack_form
+              jp_act_log_event: jp_act_log_event
+              jp_pay_order: jp_pay_order
+              jp_pay_product: jp_pay_product
+              content_block: content_block
+        description: Limit result set to users who have published posts.
+      - name: search_columns
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - email
+            - name
+            - id
+            - username
+            - slug
+          default: []
+        description: Array of column names to be searched.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/users
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/users/{id}:
+    get:
+      operationId: getAuthor
+      summary: Retrieve an author
+      description: Retrieve a single public author record by numeric id.
+      tags:
+      - Authors
+      security:
+      - {}
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the user.
+        schema:
+          type: integer
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/users/14
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/comments:
+    get:
+      operationId: listComments
+      summary: List comments
+      description: Comment collection. Empty on fasab.gov at harvest (0 records) — comments are not used on the site.
+      tags:
+      - News
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to comments published after a given ISO8601 compliant date.
+      - name: author
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Limit result set to comments assigned to specific user IDs. Requires authorization.
+      - name: author_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Ensure result set excludes comments assigned to specific user IDs. Requires authorization.
+      - name: author_email
+        in: query
+        required: false
+        schema:
+          type: string
+          format: email
+        description: Limit result set to that from a specific author email. Requires authorization.
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: Limit response to comments published before a given ISO8601 compliant date.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+        description: Offset the result set by a specific number of items.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+        description: Order sort attribute ascending or descending.
+      - name: orderby
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - date
+          - date_gmt
+          - id
+          - include
+          - post
+          - parent
+          - type
+          default: date_gmt
+        description: Sort collection by comment attribute.
+      - name: parent
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to comments of specific parent IDs.
+      - name: parent_exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific parent IDs.
+      - name: post
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to comments assigned to specific post IDs.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+          default: approve
+        description: Limit result set to comments assigned a specific status. Requires authorization.
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+          default: comment
+        description: Limit result set to comments assigned a specific type. Requires authorization.
+      - name: password
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The password for the post if it is password protected.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/comments
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/search:
+    get:
+      operationId: search
+      summary: Search FASAB content
+      description: Cross-type site search returning id, title, url, type and subtype for each hit. The most direct way for
+        an agent to locate a FASAB standard, project or meeting page by keyword.
+      tags:
+      - Search
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - post
+          - term
+          - post-format
+          default: post
+        description: Limit results to items of an object type.
+      - name: subtype
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post
+            - page
+            - category
+            - post_tag
+            - link_library_category
+            - link_library_tags
+            - any
+          default: any
+        description: Limit results to items of one or more object subtypes.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and
+            RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/search?search=lease
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/types:
+    get:
+      operationId: listContentTypes
+      summary: List content types
+      description: Every registered post type with its rest_base, namespace, taxonomies and per-type field schema — the
+        machine-readable description of what content shapes exist on this site.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/types
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/types/{type}:
+    get:
+      operationId: getContentType
+      summary: Retrieve a content type
+      description: Retrieve the registration record and field schema for one post type.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: type
+        in: path
+        required: true
+        description: An alphanumeric identifier for the post type.
+        schema:
+          type: string
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/types/post
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/taxonomies:
+    get:
+      operationId: listTaxonomies
+      summary: List taxonomies
+      description: Every registered taxonomy with its rest_base, hierarchy flag and the post types it classifies.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to taxonomies associated with a specific post type.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/taxonomies
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/taxonomies/{taxonomy}:
+    get:
+      operationId: getTaxonomy
+      summary: Retrieve a taxonomy
+      description: Retrieve the registration record for one taxonomy.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: taxonomy
+        in: path
+        required: true
+        description: An alphanumeric identifier for the taxonomy.
+        schema:
+          type: string
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/taxonomies/category
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/statuses:
+    get:
+      operationId: listStatuses
+      summary: List post statuses
+      description: Publication statuses visible anonymously. Only `publish` is returned without authentication.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/statuses
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/statuses/{status}:
+    get:
+      operationId: getStatus
+      summary: Retrieve a post status
+      description: Retrieve the registration record for one publication status.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: status
+        in: path
+        required: true
+        description: An alphanumeric identifier for the status.
+        schema:
+          type: string
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/statuses/publish
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /oembed/1.0/embed:
+    get:
+      operationId: getOembed
+      summary: oEmbed for a fasab.gov URL
+      description: oEmbed 1.0 provider endpoint. Returns title, author, provider and an embed HTML fragment for any fasab.gov
+        permalink.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: url
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uri
+        description: The URL of the resource for which to fetch oEmbed data.
+      - name: format
+        in: query
+        required: false
+        schema:
+          default: json
+      - name: maxwidth
+        in: query
+        required: false
+        schema:
+          default: 600
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ffasab.gov%2F
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope, observed live on fasab.gov (GET /wp/v2/settings returned HTTP
+        401 with this shape on 2026-09-09). It is not RFC 9457 application/problem+json.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_post_invalid_id, rest_invalid_param.
+          examples:
+          - rest_forbidden
+        message:
+          type: string
+          description: Human-readable message.
+          examples:
+          - Sorry, you are not allowed to do that.
+        data:
+          type: object
+          description: Error detail.
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code, repeated in the body.
+              examples:
+              - 401
+      required:
+      - code
+      - message

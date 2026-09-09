@@ -1,0 +1,154 @@
+generated: '2026-09-09'
+method: probed
+source: live HTTPS probes of every host this record knows
+note: 'Every named path on every known host returned a genuine HTTP 404. fasab.gov publishes no /.well-known/ discovery
+  surface at all: no security.txt, no OIDC or OAuth metadata, no api-catalog, no ai-plugin, no UCP/ACP, no AAuth
+  resource, no APIs.json and no A2A agent card. A negative-control probe to a path that cannot exist also returned
+  404 on both hosts, so these are real absences rather than a path-echoing or SPA catch-all host. Recorded as evidence;
+  NO WellKnown, SecurityTxt or AgentCard pointer is emitted in apis.yml, because there is nothing served to point
+  at.'
+host_set_note: 'The host set is the complete one this record knows: the registrable domain, its www variant, and
+  the single OpenAPI servers[] host (https://fasab.gov/wp-json), which is the same origin as fasab.gov. No baseURL,
+  docs or console host sits on any other origin, and no fetched discovery document named an authorization_servers
+  host, because none was served.'
+hit_count: 0
+hosts:
+- host: https://fasab.gov
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/api-catalog.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/ucp.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/acp.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/apis.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /apis.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /apis.yml
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/federal-accounting-standards-advisory-board-negative-control-7f3ab91c.json
+    status: 404
+    file: null
+    note: Negative control. A path that cannot exist returned 404, so this host does not echo or catch-all /.well-known/*
+      requests and the 404s above are trustworthy.
+  hit_count: 0
+  path_echo_control: passed
+- host: https://www.fasab.gov
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/api-catalog.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/ucp.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/acp.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/aauth-resource.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/apis.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /apis.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /apis.yml
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+    note: HTML 404 page returned with a real 404 status — not a soft-200 catch-all.
+  - path: /.well-known/federal-accounting-standards-advisory-board-negative-control-7f3ab91c.json
+    status: 404
+    file: null
+    note: Negative control. A path that cannot exist returned 404, so this host does not echo or catch-all /.well-known/*
+      requests and the 404s above are trustworthy.
+  hit_count: 0
+  path_echo_control: passed
+checked: '2026-09-09'

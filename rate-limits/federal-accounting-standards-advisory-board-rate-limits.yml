@@ -1,0 +1,27 @@
+generated: '2026-09-09'
+method: probed
+source: https://fasab.gov/wp-json/wp/v2/posts?per_page=2
+docs: null
+limit_count: 0
+note: >-
+  FASAB documents no rate limits, and none were observable. A live unauthenticated response on
+  2026-09-09 returned no RateLimit-*, X-RateLimit-*, Retry-After or 429 signal of any kind. The only
+  throughput-relevant headers are WordPress VIP edge caching (cache-control: max-age=60, x-cache) and
+  a hard per_page ceiling of 100 records declared in the route index. An honest zero: there is no
+  published quota for an agent to respect, and no runtime signal for it to back off on.
+limits: []
+response_headers: []
+exhaustion_status: null
+observed_headers:
+- 'cache-control: max-age=60'
+- 'x-cache: MISS'
+- 'x-rq: yyz1 0 30 9980'
+- 'strict-transport-security: max-age=31536000'
+pagination_ceiling:
+  param: per_page
+  maximum: 100
+  source: route index arg schema for /wp/v2/posts
+evidence:
+- url: https://fasab.gov/wp-json/wp/v2/posts?per_page=2
+  http_status: 200
+  checked: '2026-09-09'

@@ -64,28 +64,69 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-The Federal Accounting Standards Advisory Board (FASAB) is an independent organization responsible for establishing accounting standards for the federal government. FASAB strives to improve the quality and consistency of financial reporting within federal agencies, ultimately ensuring transparency and accountability in government financial operations.
+The Federal Accounting Standards Advisory Board (FASAB) is the U.S. federal advisory body designated to set
+generally accepted accounting principles for the federal government and its component reporting entities.
+FASAB issues Statements of Federal Financial Accounting Standards (SFFAS), technical releases, interpretations
+and staff implementation guidance, consolidates them into the FASAB Handbook, and runs the public due-process
+cycle of board and ASIC meetings, active projects and exposure drafts open for comment.
 
 **URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/apis.yml)
+
+## The API surface, and what it is
+
+FASAB publishes **no developer program, no API documentation and no machine-readable specification.**
+
+Its website runs on WordPress and serves the standard WordPress REST API anonymously at
+`https://fasab.gov/wp-json/`. That is a real, callable, read-only content API over 402 pages
+(Standards & Guidance, handbook-by-chapter, active and archived projects, board and ASIC meeting material,
+briefing documents, training and the resources library), 4 posts, 214 media records, the site taxonomies,
+public author records and cross-type site search.
+
+The OpenAPI in `openapi/` is **derived by API Evangelist, not published by FASAB.** Every path, method,
+parameter and parameter schema comes from the live route discovery document — saved verbatim alongside it as
+`federal-accounting-standards-advisory-board-wp-routes-original.json` (519 routes) — and all 28 operations
+were individually confirmed to return HTTP 200 to an unauthenticated request on 2026-09-09. The confirming
+URL and status are recorded on each operation as `x-verified`.
+
+**It is read-only.** Collection responses carry `Allow: GET`, and the whole administrative and plugin surface
+(`/wp/v2/settings`, `/plugins`, `/themes`, `/block-types`, `/users/me`, revisions, and the `wp-abilities/v1`
+namespace) returns `401 rest_forbidden` anonymously. None of it is modelled.
+
+**Important limit.** The authoritative pronouncements — the FASAB Handbook, SFFAS statements, technical
+releases and interpretations — are PDFs on `files.fasab.gov`, linked from page content. This API will tell an
+agent which page carries a standard and where its PDF lives. It will not return the text of a standard as
+structured data.
+
+## What FASAB does not publish
+
+No SDKs or client libraries in any registry, no CLI, no Postman collection, no GitHub organisation, no MCP
+server, no A2A agent card, no `/llms.txt`, no `/.well-known/` documents of any kind, no webhooks or events,
+no GraphQL, gRPC or SOAP surface, no status page, no changelog, no sandbox, no OAuth scopes, no trust centre
+and no published certifications. Each of those is recorded as a probed absence in the artifacts, with the
+URL and status returned.
 
 ## Scope
 
 - **Type:** Index
-- **Position:** Consumer
+- **Position:** Producing
 - **Access:** 3rd-Party
 
-## Tags:
+## Tags
 
- - Accounting, Federal Government
+ - Accounting, Federal Government, Standards, Financial Reporting, Government, Regulations, Content, Publications
 
 ## Timestamps
 
 - **Created:** 2024-12-25
-- **Modified:** 2026-04-28
+- **Modified:** 2026-09-09
 
 ## Common Properties
 
 - [Website](https://fasab.gov/)
+- [Blog](https://fasab.gov/newsroom/)
+- [Blog RSS](https://fasab.gov/feed/)
+- [Support / Contact](https://fasab.gov/about-fasab/contact-information/)
+- [LinkedIn](https://www.linkedin.com/company/federal-accounting-standards-advisory-board)
 
 ## Maintainers
 

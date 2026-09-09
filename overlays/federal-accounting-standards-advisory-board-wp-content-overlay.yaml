@@ -1,0 +1,38 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the FASAB Public Content API
+  version: 1.0.0
+extends: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+x-provenance:
+  generated: '2026-09-09'
+  method: generated
+  source: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+  note: >-
+    Records the enhancements API Evangelist applied on top of the raw WordPress route discovery
+    document — provenance, agent-facing guidance and the read-only posture. The harvested source
+    document (federal-accounting-standards-advisory-board-wp-routes-original.json) is never mutated.
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provenance: derived-from-live-route-index
+    x-apievangelist-harvested: '2026-09-09'
+    x-apievangelist-publisher-authored: false
+- target: $.info
+  update:
+    x-agent-guidance: >-
+      Read-only. Start at /wp/v2/search to locate a FASAB page by keyword, then GET /wp/v2/pages/{id}
+      for its content. Use _fields to trim responses and per_page (max 100) plus the X-WP-Total header
+      to page. Expect no ETag, no rate-limit header and no error type URI — errors are the WordPress
+      {code,message,data.status} envelope. The standards themselves are PDFs on files.fasab.gov,
+      linked from page content, not records in this API.
+- target: $.info
+  update:
+    x-apievangelist-surface-class: incidental-platform-api
+    x-apievangelist-surface-note: >-
+      Exposed by the WordPress platform rather than published as a product. No developer program, no
+      documentation, no versioning or deprecation policy, no status page, no SDK and no support
+      channel exists for it.
+- target: $.servers[0]
+  update:
+    x-verified-anonymous: true
+    x-verified-date: '2026-09-09'
