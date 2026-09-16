@@ -35,7 +35,7 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/federal-accounting-standards-advisory-board.png
 access: 3rd-Party
 created: '2024-12-25'
-modified: '2026-09-09'
+modified: '2026-09-16'
 position: Producing
 tags:
 - Accounting
@@ -58,33 +58,148 @@ tags_raw:
 url: https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/apis.yml
 specificationVersion: '0.23'
 apis:
-- aid: federal-accounting-standards-advisory-board:federal-accounting-standards-advisory-board-wp-content
-  name: FASAB Public Content API (WordPress REST)
-  description: 'The anonymous, read-only WordPress REST API behind fasab.gov. Serves FASAB''s site pages
-    (Standards & Guidance, handbook-by-chapter, active and archived projects, board and ASIC meeting material,
-    briefing documents, training and the resources library), its small post corpus, the media library,
-    the category/tag/Link Library taxonomies, public author records and cross-type site search. DERIVED
-    contract — FASAB publishes no specification; the OpenAPI here was derived from the live route discovery
-    document at https://fasab.gov/wp-json/ (saved verbatim alongside it) and all 28 operations were confirmed
-    HTTP 200 to unauthenticated requests on 2026-09-09. Read-only: collection responses carry Allow: GET
-    and the entire administrative and plugin surface answers 401 rest_forbidden anonymously. The authoritative
-    FASAB Handbook, SFFAS statements and technical releases are PDFs on files.fasab.gov linked from page
-    content, not records in this API.'
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/federal-accounting-standards-advisory-board.png
+- aid: federal-accounting-standards-advisory-board:federal-accounting-standards-advisory-board-authors-api
+  name: Federal Accounting Standards Advisory Board Authors API
+  description: Public author records for FASAB staff who publish content.
   humanURL: https://fasab.gov/
   baseURL: https://fasab.gov/wp-json
   tags:
-  - Accounting
-  - Standards
-  - Federal-Government
-  - Content
-  - Publications
+  - Authors
+  properties:
+  - type: OpenAPI
+    url: openapi/federal-accounting-standards-advisory-board-authors-api-openapi.yml
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-pages.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-posts.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-media.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-search.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-categories.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-error-401.json
+- aid: federal-accounting-standards-advisory-board:federal-accounting-standards-advisory-board-discovery-api
+  name: Federal Accounting Standards Advisory Board Discovery API
+  description: Route index, content types, taxonomies, statuses and oEmbed.
+  humanURL: https://fasab.gov/
+  baseURL: https://fasab.gov/wp-json
+  tags:
+  - Discovery
+  properties:
+  - type: OpenAPI
+    url: openapi/federal-accounting-standards-advisory-board-discovery-api-openapi.yml
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-pages.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-posts.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-media.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-search.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-categories.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-error-401.json
+- aid: federal-accounting-standards-advisory-board:federal-accounting-standards-advisory-board-documents-api
+  name: Federal Accounting Standards Advisory Board Documents API
+  description: The media library of uploaded files and images.
+  humanURL: https://fasab.gov/
+  baseURL: https://fasab.gov/wp-json
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/federal-accounting-standards-advisory-board-documents-api-openapi.yml
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-pages.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-posts.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-media.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-search.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-categories.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-error-401.json
+- aid: federal-accounting-standards-advisory-board:federal-accounting-standards-advisory-board-news-api
+  name: Federal Accounting Standards Advisory Board News API
+  description: Posts and comments.
+  humanURL: https://fasab.gov/
+  baseURL: https://fasab.gov/wp-json
+  tags:
+  - News
+  properties:
+  - type: OpenAPI
+    url: openapi/federal-accounting-standards-advisory-board-news-api-openapi.yml
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-pages.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-posts.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-media.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-search.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-categories.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-error-401.json
+- aid: federal-accounting-standards-advisory-board:federal-accounting-standards-advisory-board-pages-api
+  name: Federal Accounting Standards Advisory Board Pages API
+  description: FASAB site pages — standards and guidance, projects, board meetings, ASIC, training, resources.
+  humanURL: https://fasab.gov/
+  baseURL: https://fasab.gov/wp-json
+  tags:
+  - Pages
+  properties:
+  - type: OpenAPI
+    url: openapi/federal-accounting-standards-advisory-board-pages-api-openapi.yml
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-pages.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-posts.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-media.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-search.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-categories.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-error-401.json
+- aid: federal-accounting-standards-advisory-board:federal-accounting-standards-advisory-board-search-api
+  name: Federal Accounting Standards Advisory Board Search API
+  description: Cross-type site search.
+  humanURL: https://fasab.gov/
+  baseURL: https://fasab.gov/wp-json
+  tags:
   - Search
   properties:
   - type: OpenAPI
-    url: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
-  - type: Overlay
-    url: overlays/federal-accounting-standards-advisory-board-wp-content-overlay.yaml
+    url: openapi/federal-accounting-standards-advisory-board-search-api-openapi.yml
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-pages.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-posts.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-media.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-search.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-categories.json
+  - type: Examples
+    url: examples/federal-accounting-standards-advisory-board-error-401.json
+- aid: federal-accounting-standards-advisory-board:federal-accounting-standards-advisory-board-taxonomy-api
+  name: Federal Accounting Standards Advisory Board Taxonomy API
+  description: Categories, tags and the Link Library taxonomies.
+  humanURL: https://fasab.gov/
+  baseURL: https://fasab.gov/wp-json
+  tags:
+  - Taxonomy
+  properties:
+  - type: OpenAPI
+    url: openapi/federal-accounting-standards-advisory-board-taxonomy-api-openapi.yml
   - type: Examples
     url: examples/federal-accounting-standards-advisory-board-pages.json
   - type: Examples
@@ -105,7 +220,7 @@ common:
 - type: Website
   url: https://fasab.gov/
 - type: OpenAPI
-  url: openapi/federal-accounting-standards-advisory-board-wp-content-openapi.yml
+  url: openapi/_original/federal-accounting-standards-advisory-board-wp-content-openapi.yml
 - type: Authentication
   url: authentication/federal-accounting-standards-advisory-board-authentication.yml
 - type: Conventions
