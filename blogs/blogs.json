@@ -2,6 +2,13 @@
   "repo": "federal-accounting-standards-advisory-board",
   "feeds": [
     {
+      "source": "https://fasab.gov/newsroom/",
+      "feed_url": "https://fasab.gov/newsroom/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    },
+    {
       "source": "https://fasab.gov/feed/",
       "feed_url": "https://fasab.gov/feed/",
       "title": "",
@@ -9,7 +16,7 @@
       "method": "feed"
     }
   ],
-  "fetched": "2026-09-06T19:17:18Z",
+  "fetched": "2026-09-13T13:00:00Z",
   "post_count": 4,
   "feed_nature": "undetermined",
   "feed_nature_basis": null,
