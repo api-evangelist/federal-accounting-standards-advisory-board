@@ -9,6 +9,13 @@
       "method": "discovered"
     },
     {
+      "source": "https://fasab.gov/newsroom/feed/",
+      "feed_url": "https://fasab.gov/newsroom/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
       "source": "https://fasab.gov/feed/",
       "feed_url": "https://fasab.gov/feed/",
       "title": "",
@@ -16,7 +23,7 @@
       "method": "feed"
     }
   ],
-  "fetched": "2026-09-13T13:00:00Z",
+  "fetched": "2026-09-19T20:17:39Z",
   "post_count": 4,
   "feed_nature": "undetermined",
   "feed_nature_basis": null,
