@@ -1,0 +1,177 @@
+openapi: 3.2.0
+info:
+  title: FASAB Public Content API (WordPress REST) Search API
+  version: wp/v2
+  summary: The anonymous, read-only WordPress REST API serving fasab.gov content — federal accounting standards pages, board and project material, the media library, taxonomies and site search.
+  description: The Federal Accounting Standards Advisory Board publishes no developer program, no API documentation and no machine-readable specification of its own.
+  contact:
+    name: FASAB
+    email: fasab@fasab.gov
+    url: https://fasab.gov/about-fasab/contact-information/
+  license:
+    name: U.S. Government Work (17 U.S.C. Sec. 105)
+    url: https://fasab.gov/
+  x-provenance:
+    method: derived
+    source: https://fasab.gov/wp-json/
+    derived: '2026-09-09'
+    verbatim_source_file: openapi/federal-accounting-standards-advisory-board-wp-routes-original.json
+    note: Derived by API Evangelist from the live WordPress route discovery document served by fasab.gov. Not authored, published or endorsed by FASAB.
+servers:
+- url: https://fasab.gov/wp-json
+  description: WordPress REST root on fasab.gov. Verified reachable and anonymous on 2026-09-09. www.fasab.gov serves the identical site.
+security:
+- {}
+tags:
+- name: Search
+  description: Cross-type site search.
+paths:
+  /wp/v2/search:
+    get:
+      operationId: search
+      summary: Search FASAB content
+      description: Cross-type site search returning id, title, url, type and subtype for each hit. The most direct way for an agent to locate a FASAB standard, project or meeting page by keyword.
+      tags:
+      - Search
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: Current page of the collection.
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 100
+        description: Maximum number of items to be returned in result set.
+      - name: search
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to those matching a string.
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - post
+          - term
+          - post-format
+          default: post
+        description: Limit results to items of an object type.
+      - name: subtype
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - post
+            - page
+            - category
+            - post_tag
+            - link_library_category
+            - link_library_tags
+            - any
+          default: any
+        description: Limit results to items of one or more object subtypes.
+      - name: exclude
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Ensure result set excludes specific IDs.
+      - name: include
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: integer
+          default: []
+        description: Limit result set to specific IDs.
+      responses:
+        '200':
+          description: Success. A JSON array of records; the response carries X-WP-Total and X-WP-TotalPages headers and RFC 5988 Link headers for paging.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/search?search=lease
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope, observed live on fasab.gov (GET /wp/v2/settings returned HTTP 401 with this shape on 2026-09-09). It is not RFC 9457 application/problem+json.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_post_invalid_id, rest_invalid_param.
+          examples:
+          - rest_forbidden
+        message:
+          type: string
+          description: Human-readable message.
+          examples:
+          - Sorry, you are not allowed to do that.
+        data:
+          type: object
+          description: Error detail.
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code, repeated in the body.
+              examples:
+              - 401
+      required:
+      - code
+      - message

@@ -1,0 +1,538 @@
+openapi: 3.2.0
+info:
+  title: FASAB Public Content API (WordPress REST) Discovery API
+  version: wp/v2
+  summary: The anonymous, read-only WordPress REST API serving fasab.gov content — federal accounting standards pages, board and project material, the media library, taxonomies and site search.
+  description: The Federal Accounting Standards Advisory Board publishes no developer program, no API documentation and no machine-readable specification of its own.
+  contact:
+    name: FASAB
+    email: fasab@fasab.gov
+    url: https://fasab.gov/about-fasab/contact-information/
+  license:
+    name: U.S. Government Work (17 U.S.C. Sec. 105)
+    url: https://fasab.gov/
+  x-provenance:
+    method: derived
+    source: https://fasab.gov/wp-json/
+    derived: '2026-09-09'
+    verbatim_source_file: openapi/federal-accounting-standards-advisory-board-wp-routes-original.json
+    note: Derived by API Evangelist from the live WordPress route discovery document served by fasab.gov. Not authored, published or endorsed by FASAB.
+servers:
+- url: https://fasab.gov/wp-json
+  description: WordPress REST root on fasab.gov. Verified reachable and anonymous on 2026-09-09. www.fasab.gov serves the identical site.
+security:
+- {}
+tags:
+- name: Discovery
+  description: Route index, content types, taxonomies, statuses and oEmbed.
+paths:
+  /:
+    get:
+      operationId: getRouteIndex
+      summary: Route discovery index
+      description: The WordPress REST API root. Returns the site name, home URL, the list of registered namespaces and the full route index — 519 routes, of which the 29 modelled in this document are the ones reachable without authentication.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          default: view
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2:
+    get:
+      operationId: getWpV2Namespace
+      summary: wp/v2 namespace index
+      description: Route index scoped to the wp/v2 namespace — the WordPress core content namespace this document models.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: namespace
+        in: query
+        required: false
+        schema:
+          default: wp/v2
+      - name: context
+        in: query
+        required: false
+        schema:
+          default: view
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/types:
+    get:
+      operationId: listContentTypes
+      summary: List content types
+      description: Every registered post type with its rest_base, namespace, taxonomies and per-type field schema — the machine-readable description of what content shapes exist on this site.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/types
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/types/{type}:
+    get:
+      operationId: getContentType
+      summary: Retrieve a content type
+      description: Retrieve the registration record and field schema for one post type.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: type
+        in: path
+        required: true
+        description: An alphanumeric identifier for the post type.
+        schema:
+          type: string
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/types/post
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/taxonomies:
+    get:
+      operationId: listTaxonomies
+      summary: List taxonomies
+      description: Every registered taxonomy with its rest_base, hierarchy flag and the post types it classifies.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Limit results to taxonomies associated with a specific post type.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/taxonomies
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/taxonomies/{taxonomy}:
+    get:
+      operationId: getTaxonomy
+      summary: Retrieve a taxonomy
+      description: Retrieve the registration record for one taxonomy.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: taxonomy
+        in: path
+        required: true
+        description: An alphanumeric identifier for the taxonomy.
+        schema:
+          type: string
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/taxonomies/category
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/statuses:
+    get:
+      operationId: listStatuses
+      summary: List post statuses
+      description: Publication statuses visible anonymously. Only `publish` is returned without authentication.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/statuses
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /wp/v2/statuses/{status}:
+    get:
+      operationId: getStatus
+      summary: Retrieve a post status
+      description: Retrieve the registration record for one publication status.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: status
+        in: path
+        required: true
+        description: An alphanumeric identifier for the status.
+        schema:
+          type: string
+      - name: context
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - view
+          - embed
+          - edit
+          default: view
+        description: Scope under which the request is made; determines fields present in response.
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/wp/v2/statuses/publish
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+  /oembed/1.0/embed:
+    get:
+      operationId: getOembed
+      summary: oEmbed for a fasab.gov URL
+      description: oEmbed 1.0 provider endpoint. Returns title, author, provider and an embed HTML fragment for any fasab.gov permalink.
+      tags:
+      - Discovery
+      security:
+      - {}
+      parameters:
+      - name: url
+        in: query
+        required: true
+        schema:
+          type: string
+          format: uri
+        description: The URL of the resource for which to fetch oEmbed data.
+      - name: format
+        in: query
+        required: false
+        schema:
+          default: json
+      - name: maxwidth
+        in: query
+        required: false
+        schema:
+          default: 600
+      responses:
+        '200':
+          description: Success. A JSON document.
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Invalid parameter. WordPress error envelope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '401':
+          description: Not authorised for the requested context or field. WordPress error envelope with code rest_forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+        '404':
+          description: No route or resource matched. WordPress error envelope with code rest_no_route or rest_post_invalid_id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WPError'
+      x-verified:
+        url: https://fasab.gov/wp-json/oembed/1.0/embed?url=https%3A%2F%2Ffasab.gov%2F
+        http_status: 200
+        checked: '2026-09-09'
+        anonymous: true
+components:
+  schemas:
+    WPError:
+      type: object
+      description: The WordPress REST API error envelope, observed live on fasab.gov (GET /wp/v2/settings returned HTTP 401 with this shape on 2026-09-09). It is not RFC 9457 application/problem+json.
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code, e.g. rest_forbidden, rest_no_route, rest_post_invalid_id, rest_invalid_param.
+          examples:
+          - rest_forbidden
+        message:
+          type: string
+          description: Human-readable message.
+          examples:
+          - Sorry, you are not allowed to do that.
+        data:
+          type: object
+          description: Error detail.
+          properties:
+            status:
+              type: integer
+              description: The HTTP status code, repeated in the body.
+              examples:
+              - 401
+      required:
+      - code
+      - message

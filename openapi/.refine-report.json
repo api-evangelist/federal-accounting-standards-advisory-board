@@ -1,0 +1,32 @@
+{
+  "provider": "federal-accounting-standards-advisory-board",
+  "sources": [
+    "_original/federal-accounting-standards-advisory-board-wp-content-openapi.yml"
+  ],
+  "outputs": [
+    "federal-accounting-standards-advisory-board-authors-api-openapi.yml",
+    "federal-accounting-standards-advisory-board-discovery-api-openapi.yml",
+    "federal-accounting-standards-advisory-board-documents-api-openapi.yml",
+    "federal-accounting-standards-advisory-board-news-api-openapi.yml",
+    "federal-accounting-standards-advisory-board-pages-api-openapi.yml",
+    "federal-accounting-standards-advisory-board-search-api-openapi.yml",
+    "federal-accounting-standards-advisory-board-taxonomy-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "federal-accounting-standards-advisory-board-wp-content-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "federal-accounting-standards-advisory-board-authors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "federal-accounting-standards-advisory-board-discovery-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "federal-accounting-standards-advisory-board-documents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "federal-accounting-standards-advisory-board-news-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "federal-accounting-standards-advisory-board-pages-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "federal-accounting-standards-advisory-board-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "federal-accounting-standards-advisory-board-taxonomy-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
+}
