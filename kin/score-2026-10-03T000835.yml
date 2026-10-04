@@ -1,37 +1,35 @@
-# Kin Score artifact — federal-accounting-standards-advisory-board — 2026-08-27T132314
+# Kin Score artifact — federal-accounting-standards-advisory-board — 2026-10-03T000835
 # The API Evangelist rating (https://github.com/api-evangelist/kin-score). Generated; do not edit.
 ---
 kin_score:
   slug: federal-accounting-standards-advisory-board
-  schema_version: 0.15.1
-  scored_at: '2026-08-27'
-  run_ts: 2026-08-27T132314
-  composite: 3.0
-  band: minimal
+  schema_version: 0.23.0
+  scored_at: '2026-10-03'
+  run_ts: 2026-10-03T000835
+  composite: 21.2
+  band: emerging
   facets:
-    discoverability: 40.7
-    contract_quality: 0.0
-    governance: 0.0
+    discoverability: 64.3
+    contract_quality: 30.5
+    contract_governance: 4.5
     operational_transparency: 0.0
-    developer_ergonomics: 2.4
-    commercial_clarity: 0.0
-    contract_governance: 0.0
+    developer_ergonomics: 30.4
     access_clarity: 0.0
   agent_readiness:
-    score: 0.0
-    band: human-only
+    score: 20.9
+    band: agent-aware
     dimensions:
-      spec_presence: false
+      spec_presence: true
       agentic_access: false
       reversibility_documented: false
       mcp_server: false
-      auth_clarity: false
+      auth_clarity: bearer
       idempotency: false
-      error_semantics: false
-      openapi_examples: false
-      rate_limit_signal: false
+      error_semantics: derived
+      openapi_examples: documented
+      rate_limit_signal: documented
       event_surface_described: false
-      agent_skills: false
+      agent_skills: derived
       well_known_catalog: false
       consent_identity: false
       agent_card: false
@@ -44,5 +42,9 @@ kin_score:
     applies: true
     regime: Government & Public Sector
     regime_id: government
-    score: 11.1
+    score: 16.7
     matched_via: tags
+  provenance:
+    mcp: derived
+    skills: derived
+    conformance: derived
