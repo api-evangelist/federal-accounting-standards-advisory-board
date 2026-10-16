@@ -9,21 +9,21 @@
       "method": "discovered"
     },
     {
-      "source": "https://fasab.gov/newsroom/feed/",
-      "feed_url": "https://fasab.gov/newsroom/feed/",
-      "title": "",
-      "saved": 0,
-      "method": "feed"
-    },
-    {
       "source": "https://fasab.gov/feed/",
       "feed_url": "https://fasab.gov/feed/",
       "title": "",
       "saved": 0,
       "method": "feed"
+    },
+    {
+      "source": "https://fasab.gov/newsroom/feed/",
+      "feed_url": "https://fasab.gov/newsroom/feed/",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
     }
   ],
-  "fetched": "2026-10-03T12:30:02Z",
+  "fetched": "2026-10-10T13:15:00Z",
   "post_count": 4,
   "feed_nature": "undetermined",
   "feed_nature_basis": null,
