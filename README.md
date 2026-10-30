@@ -1,4 +1,4 @@
-# Federal Accounting Standards Advisory Board (federal-accounting-standards-advisory-board)
+# Federal Accounting Standards Advisory Board
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,72 +64,110 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-The Federal Accounting Standards Advisory Board (FASAB) is the U.S. federal advisory body designated to set
-generally accepted accounting principles for the federal government and its component reporting entities.
-FASAB issues Statements of Federal Financial Accounting Standards (SFFAS), technical releases, interpretations
-and staff implementation guidance, consolidates them into the FASAB Handbook, and runs the public due-process
-cycle of board and ASIC meetings, active projects and exposure drafts open for comment.
+The Federal Accounting Standards Advisory Board (FASAB) is the U.S. federal advisory body designated to set generally accepted accounting principles for the federal government and its component reporting entities. FASAB issues Statements of Federal Financial Accounting Standards (SFFAS), technical releases, interpretations and staff implementation guidance, consolidates them into the FASAB Handbook, and runs the public due-process cycle of board and ASIC meetings, active projects and exposure drafts open for comment. FASAB publishes no developer program or specification, but fasab.gov runs on WordPress and serves the WordPress REST API anonymously at https://fasab.gov/wp-json/ — a read-only surface over 402 pages, 214 media records, the site taxonomies and search, whose OpenAPI here was derived from that live route index. The authoritative pronouncements remain PDFs on files.fasab.gov.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/federal-accounting-standards-advisory-board/refs/heads/main/apis.yml)
+**Areas:** Accounting · Federal Government · Standards · Financial Reporting · Government · Regulations · Content · Publications
 
-## The API surface, and what it is
+## Federal Accounting Standards Advisory Board on APIs.io
 
-FASAB publishes **no developer program, no API documentation and no machine-readable specification.**
+Everything profiled for Federal Accounting Standards Advisory Board is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/federal-accounting-standards-advisory-board/](https://apis.io/providers/federal-accounting-standards-advisory-board/)** — or go straight to one of the APIs or properties below.
 
-Its website runs on WordPress and serves the standard WordPress REST API anonymously at
-`https://fasab.gov/wp-json/`. That is a real, callable, read-only content API over 402 pages
-(Standards & Guidance, handbook-by-chapter, active and archived projects, board and ASIC meeting material,
-briefing documents, training and the resources library), 4 posts, 214 media records, the site taxonomies,
-public author records and cross-type site search.
+### APIs (1)
 
-The OpenAPI in `openapi/` is **derived by API Evangelist, not published by FASAB.** Every path, method,
-parameter and parameter schema comes from the live route discovery document — saved verbatim alongside it as
-`federal-accounting-standards-advisory-board-wp-routes-original.json` (519 routes) — and all 28 operations
-were individually confirmed to return HTTP 200 to an unauthenticated request on 2026-09-09. The confirming
-URL and status are recorded on each operation as `x-verified`.
+- [Federal Accounting Standards Advisory Board Website (WordPress REST)](https://apis.io/apis/federal-accounting-standards-advisory-board/fasab-gov-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the Federal Accounting Standards Advisory Board website at fasab.gov: the route index of the site's content…
 
-**It is read-only.** Collection responses carry `Allow: GET`, and the whole administrative and plugin surface
-(`/wp/v2/settings`, `/plugins`, `/themes`, `/block-types`, `/users/me`, revisions, and the `wp-abilities/v1`
-namespace) returns `401 rest_forbidden` anonymously. None of it is modelled.
+### Published properties
 
-**Important limit.** The authoritative pronouncements — the FASAB Handbook, SFFAS statements, technical
-releases and interpretations — are PDFs on `files.fasab.gov`, linked from page content. This API will tell an
-agent which page carries a standard and where its PDF lives. It will not return the text of a standard as
-structured data.
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## What FASAB does not publish
+#### MCP servers (1)
 
-No SDKs or client libraries in any registry, no CLI, no Postman collection, no GitHub organisation, no MCP
-server, no A2A agent card, no `/llms.txt`, no `/.well-known/` documents of any kind, no webhooks or events,
-no GraphQL, gRPC or SOAP surface, no status page, no changelog, no sandbox, no OAuth scopes, no trust centre
-and no published certifications. Each of those is recorded as a probed absence in the artifacts, with the
-URL and status returned.
+Model Context Protocol servers that expose the API to agents.
 
-## Scope
+- [fasab-content](https://apis.io/servers/federal-accounting-standards-advisory-board/fasab-content/)
 
-- **Type:** Index
-- **Position:** Producing
-- **Access:** 3rd-Party
+#### Examples (1)
 
-## Tags
+Example requests and responses.
 
- - Accounting, Federal Government, Standards, Financial Reporting, Government, Regulations, Content, Publications
+- [Federal Accounting Standards Advisory Board Error 401](https://apis.io/examples/federal-accounting-standards-advisory-board/federal-accounting-standards-advisory-board-error-401/)
 
-## Timestamps
+#### Security (2)
 
-- **Created:** 2024-12-25
-- **Modified:** 2026-09-09
+Authentication, trust centre, and vulnerability disclosure.
 
-## Common Properties
+- [Federal Accounting Standards Advisory Board Authentication](https://apis.io/security/federal-accounting-standards-advisory-board/federal-accounting-standards-advisory-board-authentication/)
+- [Federal Accounting Standards Advisory Board Domain Security](https://apis.io/security/federal-accounting-standards-advisory-board/federal-accounting-standards-advisory-board-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Federal Accounting Standards Advisory Board Plans Pricing](https://apis.io/plans/federal-accounting-standards-advisory-board/federal-accounting-standards-advisory-board-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Federal Accounting Standards Advisory Board Rate Limits](https://apis.io/rate-limits/federal-accounting-standards-advisory-board/federal-accounting-standards-advisory-board-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://fasab.gov/)
+- [Support](https://fasab.gov/about-fasab/contact-information/)
 - [Blog](https://fasab.gov/newsroom/)
-- [Blog RSS](https://fasab.gov/feed/)
-- [Support / Contact](https://fasab.gov/about-fasab/contact-information/)
-- [LinkedIn](https://www.linkedin.com/company/federal-accounting-standards-advisory-board)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
+**Kin Score 21.2** — emerging · rubric 0.24.0 · scored 2026-10-17
 
-**Email:** kin@apievangelist.com
+| Facet | Score |
+|---|---|
+| Discoverability | 64.3 |
+| Contract quality | 30.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 30.4 |
+| Access clarity | 0.0 |
+
+**Agent readiness 20.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | documented (partial credit) |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Government & Public Sector
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/federal-accounting-standards-advisory-board/](https://apis.io/providers/federal-accounting-standards-advisory-board/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Federal Accounting Standards Advisory Board: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/federal-accounting-standards-advisory-board/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
